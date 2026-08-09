@@ -18,16 +18,16 @@ def create_db():
     connection.commit()
     connection.close()
     
-def add_problem(self, problem_name, category, difficulty):
+def add_problem(problem_name, category, difficulty):
     connection  = sqlite3.connect('leetcode.db')
     cursor = connection.cursor()
     
     command = """ 
-    INSERT INTO problems (problem_name, category, difficulty)
+    INSERT INTO problems (problem_name, difficulty, category)
     VALUES (?, ?, ?)
     """
     
-    cursor.execute(command, (problem_name, category, difficulty))
+    cursor.execute(command, (problem_name, difficulty, category))
     
     connection.commit()
     connection.close()
