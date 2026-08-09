@@ -1,15 +1,15 @@
 import sqlite3
 
-def create_db(self):
+def create_db():
     connection  = sqlite3.connect('leetcode.db')
 
     cursor = connection.cursor()
 
-    command1 = """ CREATE TABLE problems (
+    command1 = """ CREATE TABLE IF NOT EXISTS problems (
         id INTEGER PRIMARY KEY,
         problem_name TEXT NOT NULL,
         category TEXT NOT NULL,
-        difficult TEXT NOT NULL, 
+        difficulty TEXT NOT NULL, 
         date_solved DATETIME DEFAULT CURRENT_TIME
     )"""
 
@@ -18,10 +18,17 @@ def create_db(self):
     connection.commit()
     connection.close()
     
-# def add_problem(self, problem):
-#     connection  = sqlite3.connect('leetcode.db')
-#     cursor = connection.cursor()
+def add_problem(self, problem_name, category, difficulty):
+    connection  = sqlite3.connect('leetcode.db')
+    cursor = connection.cursor()
     
-#     add_problem = 
+    command = """ 
+    INSERT INTO problems (problem_name, category, difficulty)
+    VALUES (?, ?, ?)
+    """
     
+    cursor.execute(command, (problem_name, category, difficulty))
+    
+    connection.commit()
+    connection.close()
     
