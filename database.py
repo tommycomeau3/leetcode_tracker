@@ -31,4 +31,24 @@ def add_problem(problem_name, category, difficulty):
     
     connection.commit()
     connection.close()
+
+def delete_problem(problem_name):
+    connection = sqlite3.connect("leetcode.db")
+    cursor = connection.cursor()
     
+    command = """
+    DELETE FROM problems
+    WHERE id = (
+        SELECT id
+        FROM problems
+        WHERE problem_name = ?
+        ORDER BY date_solved DESC
+        LIMIT 1
+    )
+    """
+    
+    cursor.execute(command, (problem_name,))
+
+    
+    connection.commit()
+    connection.close()
