@@ -1,4 +1,3 @@
-from unicodedata import category
 import database
 
 def main():

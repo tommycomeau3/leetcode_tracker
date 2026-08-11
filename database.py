@@ -18,7 +18,7 @@ def create_db():
     connection.commit()
     connection.close()
     
-def add_problem(problem_name, category, difficulty):
+def add_problem(problem_name, difficulty, category):
     connection  = sqlite3.connect('leetcode.db')
     cursor = connection.cursor()
     
