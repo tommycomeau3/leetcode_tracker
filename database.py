@@ -52,3 +52,20 @@ def delete_problem(problem_name):
     
     connection.commit()
     connection.close()
+
+def get_problems():
+    connection  = sqlite3.connect('leetcode.db')
+    cursor = connection.cursor()
+    
+    command  = """
+    SELECT * FROM problems
+    """
+    
+    cursor.execute(command)
+    
+    problems = cursor.fetchall()
+    
+    connection.close()
+    
+    
+    return problems
