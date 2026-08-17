@@ -24,18 +24,18 @@ class Problems(Resource):
             data["category"]
         )
 
-        return {"message": "Problem added"}, 200
+        return {"message": "Problem added"}, 201
 
 class Problem(Resource):
     def delete(self, problem_name):
             
         database.delete_problem(problem_name)
             
-        return {"message": "Problem deleted"}, 201
+        return {"message": "Problem deleted"}, 200
 
 
 api.add_resource(Problems, '/api/problems/')
-api.add_resource(Problem, '/api/problem/<string:problem_name>')
+api.add_resource(Problem, '/api/problems/<string:problem_name>')
 
 @app.get("/")
 def home():
