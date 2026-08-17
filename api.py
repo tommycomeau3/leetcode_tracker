@@ -1,20 +1,14 @@
 from flask import Flask, request
 import database
-from flask_restful import Resource, Api, fields, reqparse, marshal_with, abort
+from flask_restful import Resource, Api, reqparse
 
 app = Flask(__name__) 
 api = Api(app)
 
-user_args = reqparse.RequestParser()
-user_args.add_argument('problem_name', type=str, required = True, help = "Problem name cannot be blank")
-user_args.add_argument('difficulty', type=str, required = True, help = "Difficulty cannot be blank")
-user_args.add_argument('category', type=str, required = True, help = "Category cannot be blank")
-
-userFields = {
-    'problem_name':fields.String,
-    'difficulty':fields.String,
-    'category':fields.String
-}
+problems_args = reqparse.RequestParser()
+problems_args.add_argument('problem_name', type=str, required = True, help = "Problem name cannot be blank")
+problems_args.add_argument('difficulty', type=str, required = True, help = "Difficulty cannot be blank")
+problems_args.add_argument('category', type=str, required = True, help = "Category cannot be blank")
 
 class Problems(Resource):
     def get(self):
@@ -22,7 +16,7 @@ class Problems(Resource):
         return problems
     
     def post(self):
-        data = request.get_json()
+        data = problems_args.parse_args()
 
         database.add_problem(
             data["problem_name"],
@@ -30,10 +24,18 @@ class Problems(Resource):
             data["category"]
         )
 
-        return {"message": "Problem added"}, 201
+        return {"message": "Problem added"}, 200
+
+class Problem(Resource):
+    def delete(self, problem_name):
+            
+        database.delete_problem(problem_name)
+            
+        return {"message": "Problem deleted"}, 201
+
 
 api.add_resource(Problems, '/api/problems/')
-api.add_resource(Problems, "/api/problems/")
+api.add_resource(Problem, '/api/problem/<string:problem_name>')
 
 @app.get("/")
 def home():
