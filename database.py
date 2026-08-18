@@ -48,10 +48,12 @@ def delete_problem(problem_name):
     """
     
     cursor.execute(command, (problem_name,))
-
+    deleted = cursor.rowcount > 0
     
     connection.commit()
     connection.close()
+    
+    return deleted
 
 def get_problems():
     connection  = sqlite3.connect('leetcode.db')
