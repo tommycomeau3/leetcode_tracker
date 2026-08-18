@@ -36,6 +36,12 @@ class Problem(Resource):
 
         return {"message": "Problem deleted"}, 200
 
+    def get(self, problem_name):
+        problem = database.get_problem(problem_name)
+        if problem == None:
+            return {"message": "Problem not found"}, 404
+        return problem
+
 api.add_resource(Problems, '/api/problems/')
 api.add_resource(Problem, '/api/problems/<string:problem_name>')
 

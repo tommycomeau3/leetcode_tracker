@@ -71,3 +71,23 @@ def get_problems():
     
     
     return problems
+
+def get_problem(problem_name):
+    connection = sqlite3.connect('leetcode.db')
+    cursor = connection.cursor()
+    
+    command = """
+        SELECT * FROM problems
+        WHERE problem_name = ?
+        ORDER BY date_solved DESC
+        LIMIT 1
+    """
+    
+    cursor.execute(command, (problem_name,))
+    
+    problem = cursor.fetchone()
+    
+    connection.commit()
+    connection.close()
+    
+    return problem
