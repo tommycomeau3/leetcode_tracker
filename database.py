@@ -14,7 +14,7 @@ def create_db():
         problem_name TEXT NOT NULL,
         category TEXT NOT NULL,
         difficulty TEXT NOT NULL, 
-        date_solved DATETIME DEFAULT CURRENT_TIME
+        date_solved DATETIME DEFAULT CURRENT_TIMESTAMP
     )"""
 
     cursor.execute(command1)

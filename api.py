@@ -1,6 +1,8 @@
 from flask import Flask
 import database
 from flask_restful import Resource, Api, reqparse
+from datetime import datetime
+
 
 app = Flask(__name__) 
 api = Api(app)
@@ -21,6 +23,13 @@ problems_args.add_argument('category', type=str, required = True, help = "Catego
 class Problems(Resource):
     def get(self):
         problems = database.get_problems()
+        
+        for problem in problems:
+            problem["date_solved"] = datetime.strptime(
+                problem["date_solved"],
+                "%Y-%m-%d %H:%M:%S"
+            ).strftime("%b %d, %Y at %I:%M %p")
+        
         return problems
     
     def post(self):
