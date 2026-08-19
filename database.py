@@ -1,3 +1,7 @@
+from typing import Any
+
+
+from ast import Dict
 import sqlite3
 
 def create_db():
@@ -57,6 +61,7 @@ def delete_problem(problem_name):
 
 def get_problems():
     connection  = sqlite3.connect('leetcode.db')
+    connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
     
     command  = """
@@ -70,7 +75,7 @@ def get_problems():
     connection.close()
     
     
-    return problems
+    return [dict(problem) for problem in problems]
 
 def get_problem(problem_name):
     connection = sqlite3.connect('leetcode.db')

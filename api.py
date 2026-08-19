@@ -1,13 +1,21 @@
-from flask import Flask, request
+from flask import Flask
 import database
 from flask_restful import Resource, Api, reqparse
 
 app = Flask(__name__) 
 api = Api(app)
 
+def validate_difficulty(value):
+    allowed = ["Easy", "Medium", "Hard"]
+
+    if value not in allowed:
+        raise ValueError("Difficulty must be Easy, Medium, or Hard")
+
+    return value
+
 problems_args = reqparse.RequestParser()
 problems_args.add_argument('problem_name', type=str, required = True, help = "Problem name cannot be blank")
-problems_args.add_argument('difficulty', type=str, required = True, help = "Difficulty cannot be blank")
+problems_args.add_argument('difficulty', type=validate_difficulty, required = True, help = "Difficulty must be Easy, Medium, or Hard")
 problems_args.add_argument('category', type=str, required = True, help = "Category cannot be blank")
 
 class Problems(Resource):
@@ -27,7 +35,7 @@ class Problems(Resource):
         return {"message": "Problem added"}, 201 
 
 update_args = reqparse.RequestParser()
-update_args.add_argument("difficulty", type=str)
+update_args.add_argument("difficulty", type=validate_difficulty)
 update_args.add_argument("category", type=str)
 
 class Problem(Resource):
@@ -49,6 +57,9 @@ class Problem(Resource):
     def patch(self, problem_name):
         data = update_args.parse_args()
         
+        if data["difficulty"] is None and data["category"] is None:
+            return {"message": "No update fields provided"}, 400
+        
         updated = database.update_problem(
             problem_name,
             data["difficulty"],
@@ -56,8 +67,8 @@ class Problem(Resource):
         )
         
         if not updated:
-            return {"message": "Problem not updated"}, 404
-        return updated
+            return {"message": "Problem not found"}, 404
+        return {"message": "Problem updated"}, 200
         
 
 api.add_resource(Problems, '/api/problems/')
