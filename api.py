@@ -38,7 +38,7 @@ class Problem(Resource):
 
     def get(self, problem_name):
         problem = database.get_problem(problem_name)
-        if problem == None:
+        if problem is None:
             return {"message": "Problem not found"}, 404
         return problem
 

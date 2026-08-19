@@ -87,7 +87,6 @@ def get_problem(problem_name):
     
     problem = cursor.fetchone()
     
-    connection.commit()
     connection.close()
     
     return problem
