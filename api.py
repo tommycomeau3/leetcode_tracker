@@ -49,7 +49,7 @@ update_args.add_argument("category", type=str)
 
 class Problem(Resource):
     def delete(self, problem_name):
-            
+
         deleted = database.delete_problem(problem_name)
         
         if not deleted:
@@ -61,6 +61,10 @@ class Problem(Resource):
         problem = database.get_problem(problem_name)
         if problem is None:
             return {"message": "Problem not found"}, 404
+        problem["date_solved"] = datetime.strptime(
+            problem["date_solved"],
+            "%Y-%m-%d %H:%M:%S"
+        ).strftime("%b %d, %Y at %I:%M %p")
         return problem
     
     def patch(self, problem_name):

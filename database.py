@@ -79,6 +79,7 @@ def get_problems():
 
 def get_problem(problem_name):
     connection = sqlite3.connect('leetcode.db')
+    connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
     
     command = """
@@ -94,7 +95,7 @@ def get_problem(problem_name):
     
     connection.close()
     
-    return problem
+    return dict(problem)
 
 def update_problem(problem_name, difficulty=None, category=None):
     connection = sqlite3.connect('leetcode.db')
