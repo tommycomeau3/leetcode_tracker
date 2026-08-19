@@ -26,6 +26,10 @@ class Problems(Resource):
         
         return {"message": "Problem added"}, 201 
 
+update_args = reqparse.RequestParser()
+update_args.add_argument("difficulty", type=str)
+update_args.add_argument("category", type=str)
+
 class Problem(Resource):
     def delete(self, problem_name):
             
@@ -41,6 +45,20 @@ class Problem(Resource):
         if problem is None:
             return {"message": "Problem not found"}, 404
         return problem
+    
+    def patch(self, problem_name):
+        data = update_args.parse_args()
+        
+        updated = database.update_problem(
+            problem_name,
+            data["difficulty"],
+            data["category"]
+        )
+        
+        if not updated:
+            return {"message": "Problem not updated"}, 404
+        return updated
+        
 
 api.add_resource(Problems, '/api/problems/')
 api.add_resource(Problem, '/api/problems/<string:problem_name>')

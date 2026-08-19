@@ -90,3 +90,33 @@ def get_problem(problem_name):
     connection.close()
     
     return problem
+
+def update_problem(problem_name, difficulty=None, category=None):
+    connection = sqlite3.connect('leetcode.db')
+    cursor = connection.cursor()
+    
+    if difficulty is not None:
+        cursor.execute(
+            """
+            UPDATE problems
+            SET difficulty = ?
+            WHERE problem_name = ?
+            """,
+            (difficulty, problem_name)
+        )
+    
+    if category is not None:
+        cursor.execute(
+            """
+            UPDATE problems
+            SET category = ?
+            WHERE problem_name = ?
+            """,
+            (category, problem_name)
+        )
+    
+    updated = cursor.rowcount > 0
+    connection.commit()
+    connection.close()
+    
+    return updated
