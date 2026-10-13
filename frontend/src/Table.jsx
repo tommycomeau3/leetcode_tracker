@@ -18,8 +18,23 @@ function Table() {
     }, []);
 
     return (
-        <div>
-            {/* Your table will go here */}
+        <div className = "table">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Difficulty</th>
+                    <th>Date Solved</th>
+                </tr>
+                {problems.map((problem) => (
+                    <tr key={problem.id}>
+                        <td>{problem.problem_name}</td>
+                        <td>{problem.category}</td>
+                        <td>{problem.difficulty}</td>
+                        <td>{problem.date_solved}</td>
+                    </tr>
+                ))}
+            </table>
         </div>
     );
 }
